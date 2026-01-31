@@ -2,6 +2,7 @@
 \ProvidesClass{practice}[2026/01/01 Desiment LaTeX class for practice,  homeworks and test files]
 \RequirePackage{kvoptions}  % Key-value options
 
+\SetupKeyvalOptions{family=practice, prefix=practice@}
 \DeclareStringOption[{records.lua}]{recordsfile}     % Filename for title configuration
 \DeclareOption{seminar}{%
   \newcommand{\SeminarName}{}
