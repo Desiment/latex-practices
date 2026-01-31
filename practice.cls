@@ -18,6 +18,10 @@
     \rhead{\SeminarDate}%
     % Название практики
     \section*{\SeminarName}%
+	% Шаблон без баллов
+	\xsimsetup{%
+		exercise/template = ex-custom-template-no-points%
+	}%
   }
 }
 
@@ -33,6 +37,9 @@
     \lhead{\PracticeSpeciality, \PracticeUni, курс \PracticeCourse}%
     \chead{\PracticeSubject. Д.З. №\HomeworkNumber}%
     \rhead{Дедлайн: \HomeworkDeadline}%
+	\xsimsetup{%
+		exercise/template = ex-custom-template-points%
+	}%
   }
 }
 
@@ -116,11 +123,11 @@
 \RequirePackage{tasks}
 
 
-\DeclareExerciseEnvironmentTemplate{ex-custom-template}
+\DeclareExerciseEnvironmentTemplate{ex-custom-template-points}
 {%
 	\par\vspace{\baselineskip}
 	\noindent
-	\textbf{\XSIMmixedcase{\GetExerciseName}~\GetExerciseProperty{counter}}%
+	\textbf{\XSIMmixedcase{\GetExerciseName}~\GetExerciseProperty{counter}.}%
 	\GetExercisePropertyT{subtitle}{ \textit{#1}}%
 	\hfill\par\noindent%
 	(%
@@ -128,18 +135,27 @@
 	\GetExercisePropertyT{bonus-points}{+\printgoal{#1}}%
 	\,\XSIMtranslate{point-abbr}%
 	)
-}
+}%
 {}
-%
+
+\DeclareExerciseEnvironmentTemplate{ex-custom-template-no-points}
+{%
+	\par\vspace{\baselineskip}
+	\noindent
+	\textbf{\XSIMmixedcase{\GetExerciseName}~\GetExerciseProperty{counter}.}%
+	\GetExercisePropertyT{subtitle}{ \textit{#1}}%
+	\hfill\par%
+}%
+{}
+
 \DeclareExerciseEnvironmentTemplate{sol-custom-template}
 {%
   \par\vspace{\baselineskip}%
   \noindent\textit{\GetExerciseName.\ }{}
 }%
-
+{}
 \xsimsetup{
-exercise/template = ex-custom-template,
-solution/template = sol-custom-template
+  solution/template = sol-custom-template
 }
 
 \settasks{
