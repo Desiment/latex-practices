@@ -45,10 +45,8 @@
 % Доступ к полям комманд \author{...} и \date{...}
 \title{Unknown} % Инициализируем \@title и \@date
 \date{Unknown}  % чтобы \edef работал корректно
-\makeatletter
 \def\strtitle{\@title}
 \def\strdate{\@date}
-\makeatother
 
 % ============================================================================
 % LOCALIZATION
