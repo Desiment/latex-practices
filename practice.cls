@@ -2,10 +2,7 @@
 \ProvidesClass{practice}[2026/01/01 Desiment LaTeX class for practice,  homeworks and test files]
 \RequirePackage{kvoptions}  % Key-value options
 
-\SetupKeyvalOptions{prefix=practice@}
 \DeclareStringOption[{records.lua}]{recordsfile}     % Filename for title configuration
-\DeclareStringOption[]{refconf}     % Filename for references configuration
-
 \DeclareOption{seminar}{%
   \newcommand{\SeminarName}{}
   \newcommand{\SeminarDate}{}
@@ -86,10 +83,10 @@
 % PREAMBLE
 % ============================================================================
 
-\usepackage[tikz,listings,memoization]{flsuite}
+\RequirePackage[tikz,listings,memoization]{flsuite}
 \definecolor{deepblue}{RGB}{53,102,161}
 
-\usepackage[theorems]{tssuite}
+\RequirePackage[theorems]{tssuite}
 
 \NewStarredTheorem{theorem}{Теорема}
 \NewStarredTheorem{lemma}{Лемма}
@@ -100,16 +97,15 @@
 \NewStarredTheorem{remark}{Замечание}
 \NewStarredTheorem{notation}{Нотация}
 
-\usepackage[all]{xamsmath}
+\RequirePackage[all]{xamsmath}
 \XAMSMathLoadPlugin{foundations}
 \XAMSMathLoadPlugin{algebra}
 \XAMSMathLoadPlugin{calculus}
 \XAMSMathLoadPlugin{combinatorics}
 \XAMSMathLoadPlugin{probability}
 
-\usepackage[configuration=\practice@refconf]{refsuite}
-\usepackage{xsim}
-\usepackage{tasks}
+\RequirePackage{xsim}
+\RequirePackage{tasks}
 
 
 \DeclareExerciseEnvironmentTemplate{ex-custom-template}
