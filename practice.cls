@@ -16,7 +16,7 @@
     \chead{\PracticeSubject. Практика}%
     \rhead{\SeminarDate}%
     % Название практики
-    \section*{\strtitle}%
+    \section*{\SeminarName}%
   }
 }
 
@@ -39,6 +39,14 @@
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
 \LoadClass[a4paper]{article}
+
+% Доступ к полям комманд \author{...} и \date{...}
+\title{Unknown} % Инициализируем \@title и \@date
+\date{Unknown}  % чтобы \edef работал корректно
+\makeatletter
+\def\strtitle{\@title}
+\def\strdate{\@date}
+\makeatother
 
 % ============================================================================
 % LOCALIZATION
