@@ -151,7 +151,7 @@
 \DeclareExerciseEnvironmentTemplate{sol-custom-template}
 {%
   \par\vspace{\baselineskip}%
-  \noindent\textit{\GetExerciseName.\ }{}
+  \noindent\textit{\XSIMmixedcase{\GetExerciseName}.\ }{}
 }%
 {}
 \xsimsetup{
