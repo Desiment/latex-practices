@@ -129,7 +129,7 @@
 	\noindent
 	\textbf{\XSIMmixedcase{\GetExerciseName}~\GetExerciseProperty{counter}.}%
 	\GetExercisePropertyT{subtitle}{ \textit{#1}}%
-	\hfill\par\noindent%
+	\ %\hfill\par\noindent%
 	(%
 	\printgoal{\GetExerciseProperty{points}}%
 	\GetExercisePropertyT{bonus-points}{+\printgoal{#1}}%
@@ -144,7 +144,7 @@
 	\noindent
 	\textbf{\XSIMmixedcase{\GetExerciseName}~\GetExerciseProperty{counter}.}%
 	\GetExercisePropertyT{subtitle}{ \textit{#1}}%
-	\hfill\par%
+	\ %\hfill\par%
 }%
 {}
 
