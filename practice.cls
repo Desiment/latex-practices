@@ -25,6 +25,26 @@
   }
 }
 
+\DeclareOption{answersheet}{%
+  \newcommand{\TestDate}{}
+  \newcommand{\TestTitle}{Контрольная работа}
+  \AtBeginDocument{%
+    % Метаданные:
+    \title{Контрольная работа}%
+    \date{\SeminarDate}%
+    % Настраиваем колонтитулы
+    \pagestyle{fancy}%
+    \lhead{\PracticeSpeciality, \PracticeUni, курс \PracticeCourse}%
+    \chead{\PracticeSubject. \TestTitle}%
+    \rhead{\TestDate}%
+	% Шаблон с баллами
+	\xsimsetup{%
+		exercise/template = ex-custom-template-points%
+	}
+  }
+}
+
+
 \DeclareOption{homework}{%
   \newcommand{\HomeworkNumber}{}
   \newcommand{\HomeworkDeadline}{}
@@ -119,9 +139,81 @@
 \XAMSMathLoadPlugin{combinatorics}
 \XAMSMathLoadPlugin{probability}
 
+% ============================================================================
+% TABLES (XSIM)
+% ============================================================================
+
+
 \RequirePackage{xsim}
 \RequirePackage{tasks}
 
+
+\ExplSyntaxOn
+\DeclareExerciseTableTemplate {sheetgr}
+  {
+    \XSIMputright \ExerciseTableCode
+      {
+        \toprule
+        \XSIMifblankF { \ExerciseType }
+          { \XSIMmixedcase { \GetExerciseParameter {exercise-name} } }
+        &
+      }
+    \ForEachUsedExerciseByOrder
+      {
+        \XSIMifeqT {#1} { \ExerciseTableType {#1} }
+          {
+            \XSIMifblankT { \ExerciseTableType {} }
+              {
+                \XSIMputright \ExerciseTableCode
+                  {
+                    \XSIMmixedcase
+                      { \ExerciseParameterGet {#1} {exercise-name} ~ }
+                  }
+              }
+            \XSIMputright \ExerciseTableCode { #3 & }
+          }
+      }
+    \XSIMputright \ExerciseTableCode
+      {
+        \XSIMtranslate {total} \\
+		\midrule \XSIMmixedcase { Максимум } &
+      }
+    \ForEachUsedExerciseByOrder
+      {
+        \XSIMifeqT {#1} { \ExerciseTableType {#1} }
+          {
+            \XSIMputright \ExerciseTableCode
+              { \XSIMifblankTF {#5} {\printgoal{0}} {\printgoal{#5}} & }
+          }
+      }
+    \XSIMputright \ExerciseTableCode
+      {
+        \XSIMifblankTF { \ExerciseType }
+          { \TotalExerciseGoal {points} {} {} }
+          { \TotalExerciseTypeGoal { \ExerciseType } {points} {} {} }
+        \\ \midrule
+		\XSIMmixedcase { \XSIMtranslate { reached }} &
+      }
+    \ForEachUsedExerciseByOrder
+      {
+        \XSIMifeqT {#1} { \ExerciseTableType {#1} }
+          { \XSIMputright \ExerciseTableCode {&} }
+      }
+    \XSIMputright \ExerciseTableCode { \\ \bottomrule }
+    \edef \numberofcolumns
+      {
+        \XSIMifblankTF { \ExerciseType }
+          {\numberofusedexercises}
+          {\csname numberof \ExerciseType s\endcsname}
+      }
+    \XSIMifeqF {\numberofcolumns} {0}
+      {
+        \begin {tabular} {l*{\numberofcolumns}{c}c}
+        \ExerciseTableCode
+        \end {tabular}
+      }
+  }
+\ExplSyntaxOff
 
 \DeclareExerciseEnvironmentTemplate{ex-custom-template-points}
 {%
@@ -155,7 +247,8 @@
 }%
 {}
 \xsimsetup{
-  solution/template = sol-custom-template
+  solution/template = sol-custom-template,
+  grading-table/template = sheetgr
 }
 
 \settasks{
@@ -165,6 +258,8 @@ label-width = 2em ,
 label-offset = 0pt
 }
 
+%% Utils
+\newcommand{\addpt}[1]{(\textit{\addpoints{#1}})}
 \NewDocumentCommand{\PrintTotalPoints}{}{\vspace{0.5ex}\hrule\vspace{0.5ex}\hfill Сумма баллов \TotalExerciseTypeGoal{exercise}{points}{}{}}
 
 % ============================================================================
