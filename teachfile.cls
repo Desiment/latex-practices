@@ -1,73 +1,39 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{practice}[2026/01/01 Desiment LaTeX class for practice,  homeworks and test files]
-\RequirePackage{kvoptions}  % Key-value options
+\ProvidesClass{teachfile}[2026/01/01 Desiment LaTeX class for seminars, homeworks and test files]
+
+% ============================================================================
+% INITIAL SETUP
+% ============================================================================
+
+\RequirePackage{etoolbox}  % different LaTeX2e neats
+\RequirePackage{xparse}
+\RequirePackage{kvoptions} % Key-value options
+
+
 \SetupKeyvalOptions{prefix=practice@}
 \DeclareStringOption[{records.lua}]{recordsfile}     % Filename for title configuration
 
-\DeclareOption{seminar}{%
-  \newcommand{\SeminarName}{}
-  \newcommand{\SeminarDate}{}
-  \AtBeginDocument{%
-    % Метаданные:
-    \title{\SeminarName}%
-    \date{\SeminarDate}%
-    % Настраиваем колонтитулы
-    \pagestyle{fancy}%
-    \lhead{\PracticeSpeciality, \PracticeUni, курс \PracticeCourse}%
-    \chead{\PracticeSubject. Практика}%
-    \rhead{\SeminarDate}%
-    % Название практики
-    \section*{\SeminarName}%
-	% Шаблон без баллов
-	\xsimsetup{%
-		exercise/template = ex-custom-template-no-points%
-	}%
-  }
-}
+\DeclareBoolOption{ru}
+\DeclareComplementaryOption{en}
 
-\DeclareOption{answersheet}{%
-  \newcommand{\TestDate}{}
-  \newcommand{\TestTitle}{Контрольная работа}
-  \AtBeginDocument{%
-    % Метаданные:
-    \title{Контрольная работа}%
-    \date{\SeminarDate}%
-    % Настраиваем колонтитулы
-    \pagestyle{fancy}%
-    \lhead{\PracticeSpeciality, \PracticeUni, курс \PracticeCourse}%
-    \chead{\PracticeSubject. \TestTitle}%
-    \rhead{\TestDate}%
-	% Шаблон с баллами
-	\xsimsetup{%
-		exercise/template = ex-custom-template-points%
-	}
-  }
-}
+\DeclareBoolOption{practice}
+\DeclareBoolOption{homework}
+\DeclareBoolOption{testpaper}
+\DeclareBoolOption{testsheet}
+\DeclareBoolOption{quiz}
 
-
-\DeclareOption{homework}{%
-  \newcommand{\HomeworkNumber}{}
-  \newcommand{\HomeworkDeadline}{}
-  \AtBeginDocument{%
-    % Метаданные:
-    \title{Д.З. \HomeworkNumber}%
-    \date{\HomeworkDeadline}%
-    % Настраиваем колонтитулы
-    \pagestyle{fancy}%
-    \lhead{\PracticeSpeciality, \PracticeUni, курс \PracticeCourse}%
-    \chead{\PracticeSubject. Д.З. №\HomeworkNumber}%
-    \rhead{Дедлайн: \HomeworkDeadline}%
-	\xsimsetup{%
-		exercise/template = ex-custom-template-points%
-	}%
-  }
-}
-
-% TODO: implement option "test" for exam template
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessKeyvalOptions*
-\ProcessOptions\relax
 \LoadClass[a4paper]{article}
+
+
+%\CreateField{SetterControlSequence, FieldName}
+\NewDocumentCommand{\CreateField}{mm}{
+	\exp_args:NN\tl_new:{\use:c{g_user_field_#2}}
+	\NewDocumentCommand{#1}{m}{
+		\exp_args:NN\tl_gseq_eq:NN{\use:c{g_user_field_#2}}{##1}
+	}
+}
 
 % Доступ к полям комманд \author{...} и \date{...}
 \title{Unknown} % Инициализируем \@title и \@date
@@ -76,7 +42,7 @@
 \def\strdate{\@date}
 
 % ============================================================================
-% LOCALIZATION
+% FONTS & LOCALIZATION
 % ============================================================================
 
 \RequirePackage{fontspec}
@@ -86,10 +52,13 @@
 %\setmonofont{Fira Code}[Contextuals=Alternate,Scale=0.9]
 %\setmonofont{Inconsolata}
 
-% Русский язык
-\RequirePackage[babelshorthands]{polyglossia}
-\setmainlanguage{russian}
-\setotherlanguage{english}
+
+\if@teachfile@ru
+	% Русский язык
+	\RequirePackage[babelshorthands]{polyglossia}
+	\setmainlanguage{russian}
+	\setotherlanguage{english}
+\fi
 
 % Smart quotes based on current language
 \RequirePackage[autostyle]{csquotes}
@@ -281,6 +250,12 @@ label-offset = 0pt
 \DeclareExerciseTranslation{russian}{collection-heading}{\XSIMmixedcase{\GetExerciseParameter{exercises-name}}}
 \DeclareExerciseTranslation{russian}{per-section-heading}{\XSIMmixedcase{\GetExerciseParameter{solutions-name}} к \XSIMmixedcase{\GetExerciseParameter{exercises-name}} Раздела \nobreakspace \ExerciseSection}
 \DeclareExerciseTranslation{russian}{per-chapter-heading}{\XSIMmixedcase{\GetExerciseParameter{solutions-name}} к \XSIMmixedcase{\GetExerciseParameter{exercises-name}} Главы \nobreakspace \ExerciseChapter}
+
+\AtEndOfClass{%
+  \if@seminar\RequirePackage{seminar}\fi
+  \if@homework\RequirePackage{homework}\fi
+  \if@examproblems\RequirePackage{exam-problems}\fi
+}
 
 
 

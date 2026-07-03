@@ -1,0 +1,11 @@
+# Use LuaLaTeX
+$pdf_mode=4;
+# Base command
+$lualatex = "lualatex %O -halt-on-error -synctex=1 --shell-escape %S";
+# Add records file for header to the path 
+ensure_path( 'LUAINPUTS', './records.lua' );
+# Add dependencies to the path
+ensure_path( 'LUAINPUTS', '../dependencies//' );
+ensure_path( 'TEXINPUTS', '../dependencies//' );
+ensure_path( 'TEXINPUTS', '..//' );
+# Add practicestyles to the path
