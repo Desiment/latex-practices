@@ -1,0 +1,26 @@
+\geometry{%
+  a4paper,
+  margin=1cm,
+  includefoot,
+  includehead
+}
+
+\CreateTextField{\SetHomeworkNumber}{homeworknumber}
+\CreateTextField{\SetHomeworkDeadline}{homeworkdeadline}
+
+\SetHomeworkNumber{}
+\SetHomeworkDeadline{}
+
+\newcommand{\HomeworkNumber}{\PrintTextField{homeworknumber}}
+\newcommand{\HomeworkDeadline}{\PrintTextField{homeworkdeadline}}
+
+\AtBeginDocument{%
+  \title{Д.З. \HomeworkNumber}%
+  \date{\HomeworkDeadline}%
+  \pagestyle{fancy}%
+  \fancyhf{}%
+  \fancyhead[L]{\PracticeSpeciality, \PracticeUni, курс \PracticeCourse}%
+  \fancyhead[C]{\PracticeSubject. Д.З. №\HomeworkNumber}%
+  \fancyhead[R]{Дедлайн: \HomeworkDeadline}%
+  \fancyfoot[C]{\thepage}%
+}

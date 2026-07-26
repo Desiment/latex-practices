@@ -1,0 +1,34 @@
+\geometry{%
+  a4paper,
+  margin=1.2cm,
+  includefoot,
+  includehead
+}
+
+\CreateTextField{\SetTestDate}{testdate}
+\CreateTextField{\SetTestTitle}{testtitle}
+
+\SetTestDate{}
+\SetTestTitle{Тест}
+
+\newcommand{\TestDate}{\PrintTextField{testdate}}
+\newcommand{\TestTitle}{\PrintTextField{testtitle}}
+
+\AtBeginDocument{%
+  \title{\TestTitle}%
+  \date{\TestDate}%
+  \pagestyle{fancy}%
+  \fancyhf{}%
+  \fancyhead[L]{\PracticeSubject}%
+  \fancyhead[C]{\TestTitle}%
+  \fancyhead[R]{\TestDate}%
+  \fancyfoot[L]{\PracticeSpeciality, курс \PracticeCourse}%
+  \fancyfoot[C]{\thepage}%
+  \fancyfoot[R]{}%
+  \noindent\textbf{\TestTitle}\hfill \TestDate\par
+  \noindent\PracticeSpeciality, \PracticeUni, курс \PracticeCourse\par
+  \vspace{0.8\baselineskip}%
+  \noindent Фамилия, имя:\enspace\hrulefill\par
+  \vspace{0.8\baselineskip}%
+  \xsimsetup{question/template = ex-custom-template-no-points}%
+}

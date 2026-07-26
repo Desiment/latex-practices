@@ -1,0 +1,13 @@
+$pdf_mode  = 4;
+$aux_dir   = '.build';
+$out_dir   = '.';
+$clean_ext = 'out xsim';
+
+$lualatex = 'lualatex %O -halt-on-error --shell-escape %S';
+
+ensure_path('TEXINPUTS', '../.dependicies//');
+ensure_path('TEXINPUTS', '..//');
+ensure_path('LUAINPUTS', '..//');
+
+# Quiz print mode uses the same quiz template with \print defined:
+# latexmk -lualatex='lualatex %O -halt-on-error --shell-escape "\def\print{}\input{%S}"' template.quiz.tex

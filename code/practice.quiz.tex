@@ -1,0 +1,58 @@
+\geometry{%
+  a5paper,
+  margin=8mm,
+  includefoot,
+  includehead
+}
+
+\CreateTextField{\SetQuizNumber}{quiznumber}
+\CreateTextField{\SetQuizDate}{quizdate}
+\CreateTextField{\SetQuizTitle}{quiztitle}
+
+\SetQuizNumber{}
+\SetQuizDate{}
+\SetQuizTitle{Летучка №\QuizNumber}
+
+\newcommand{\QuizNumber}{\PrintTextField{quiznumber}}
+\newcommand{\QuizDate}{\PrintTextField{quizdate}}
+\newcommand{\QuizTitle}{\PrintTextField{quiztitle}}
+
+\ifdefined\print
+  \RequirePackage{pgfpages}
+  \pgfpagesdeclarelayout{practice quiz two copies}
+  {}
+  {%
+    \pgfpagesphysicalpageoptions{%
+      logical pages=2,%
+      physical height=210mm,%
+      physical width=297mm,%
+      last logical shipout=1%
+    }%
+    \pgfpageslogicalpageoptions{1}{%
+      resized width=148mm,%
+      resized height=210mm,%
+      center=\pgfpoint{74.25mm}{105mm}%
+    }%
+    \pgfpageslogicalpageoptions{2}{%
+      resized width=148mm,%
+      resized height=210mm,%
+      center=\pgfpoint{222.75mm}{105mm},%
+      copy from=1%
+    }%
+  }%
+  \pgfpagesuselayout{practice quiz two copies}%
+\fi
+
+\practice@AtBeginDocumentAfterXSIM{quiz}{%
+  \title{\QuizTitle}%
+  \date{\QuizDate}%
+  \pagestyle{fancy}%
+  \fancyhf{}%
+  \fancyhead[L]{\PracticeSubject}%
+  \fancyhead[C]{\QuizTitle}%
+  \fancyhead[R]{}%
+  \fancyfoot[L]{\PracticeSpeciality}%
+  \fancyfoot[C]{\thepage}%
+  \fancyfoot[R]{Всего: \TotalExerciseTypeGoal{question}{points}{}{} б.}%
+  \practice@printgradingheader[question]
+}

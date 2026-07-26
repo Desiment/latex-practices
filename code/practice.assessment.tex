@@ -1,0 +1,32 @@
+\geometry{%
+  a4paper,
+  margin=1.5cm,
+  includefoot,
+  includehead
+}
+
+\CreateTextField{\SetAssessmentNumber}{assessmentnumber}
+\CreateTextField{\SetAssessmentDate}{assessmentdate}
+\CreateTextField{\SetAssessmentTitle}{assessmenttitle}
+
+\SetAssessmentNumber{}
+\SetAssessmentDate{}
+\SetAssessmentTitle{Контрольная работа №\AssessmentNumber}
+
+\newcommand{\AssessmentNumber}{\PrintTextField{assessmentnumber}}
+\newcommand{\AssessmentDate}{\PrintTextField{assessmentdate}}
+\newcommand{\AssessmentTitle}{\PrintTextField{assessmenttitle}}
+
+\practice@AtBeginDocumentAfterXSIM{assessment}{%
+  \title{\AssessmentTitle}%
+  \date{\AssessmentDate}%
+  \pagestyle{fancy}%
+  \fancyhf{}%
+  \fancyhead[L]{\PracticeSubject}%
+  \fancyhead[C]{Контрольная работа}%
+  \fancyhead[R]{}%
+  \fancyfoot[L]{\PracticeSpeciality, курс \PracticeCourse}%
+  \fancyfoot[C]{\thepage}%
+  \fancyfoot[R]{Всего: \TotalExerciseTypeGoal{exercise}{points}{}{} б.}%
+  \practice@printgradingheader
+}

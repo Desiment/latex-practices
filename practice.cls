@@ -1,53 +1,22 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{practice}[2026/01/01 Desiment LaTeX class for practice,  homeworks and test files]
+\ProvidesClass{practice}[2026/07/05 v0.2.0 Desiment LaTeX class for practice, homeworks and tests]
 \RequirePackage{kvoptions}  % Key-value options
 \SetupKeyvalOptions{prefix=practice@}
 \DeclareStringOption[{records.lua}]{recordsfile}     % Filename for title configuration
 
-\DeclareOption{seminar}{%
-  \newcommand{\SeminarName}{}
-  \newcommand{\SeminarDate}{}
-  \AtBeginDocument{%
-    % Метаданные:
-    \title{\SeminarName}%
-    \date{\SeminarDate}%
-    % Настраиваем колонтитулы
-    \pagestyle{fancy}%
-    \lhead{\PracticeSpeciality, \PracticeUni, курс \PracticeCourse}%
-    \chead{\PracticeSubject. Практика}%
-    \rhead{\SeminarDate}%
-    % Название практики
-    \section*{\SeminarName}%
-	% Шаблон без баллов
-	\xsimsetup{%
-		exercise/template = ex-custom-template-no-points%
-	}%
-  }
-}
-
-\DeclareOption{homework}{%
-  \newcommand{\HomeworkNumber}{}
-  \newcommand{\HomeworkDeadline}{}
-  \AtBeginDocument{%
-    % Метаданные:
-    \title{Д.З. \HomeworkNumber}%
-    \date{\HomeworkDeadline}%
-    % Настраиваем колонтитулы
-    \pagestyle{fancy}%
-    \lhead{\PracticeSpeciality, \PracticeUni, курс \PracticeCourse}%
-    \chead{\PracticeSubject. Д.З. №\HomeworkNumber}%
-    \rhead{Дедлайн: \HomeworkDeadline}%
-	\xsimsetup{%
-		exercise/template = ex-custom-template-points%
-	}%
-  }
-}
-
-% TODO: implement option "test" for exam template
+\def\practice@mode{seminar}
+\DeclareOption{seminar}{\def\practice@mode{seminar}}
+\DeclareOption{homework}{\def\practice@mode{homework}}
+\DeclareOption{assessment}{\def\practice@mode{assessment}}
+\DeclareOption{quiz}{\def\practice@mode{quiz}}
+\DeclareOption{test}{\def\practice@mode{test}}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessKeyvalOptions*
 \ProcessOptions\relax
 \LoadClass[a4paper]{article}
+
+\RequirePackage{iftex}
+\RequireLuaTeX
 
 % Доступ к полям комманд \author{...} и \date{...}
 \title{Unknown} % Инициализируем \@title и \@date
@@ -86,13 +55,14 @@
   includehead
 }
 
-\directlua{records = require('\practice@recordsfile')}
-\newcommand{\PracticeSubject}{\directlua{tex.sprint(records.subject)}}
-\newcommand{\PracticeSpeciality}{\directlua{tex.sprint(records.speciality)}}
-\newcommand{\PracticeCourse}{\directlua{tex.sprint(records.course)}}
-\newcommand{\PracticeUni}{\directlua{tex.sprint(records.uni)}}
+\directlua{
+  local recordsfile = [[\practice@recordsfile]]
+  local recordspath = kpse.find_file(recordsfile, "lua") or recordsfile
+  records = dofile(recordspath)
+}
 
 \RequirePackage{fancyhdr}
+\setlength{\headheight}{14pt}
 
 % ============================================================================
 % PREAMBLE
@@ -102,6 +72,21 @@
 \definecolor{deepblue}{RGB}{53,102,161}
 
 \RequirePackage[theorems]{tssuite}
+
+\CreateTextField{\SetPracticeSubject}{practicesubject}
+\CreateTextField{\SetPracticeSpeciality}{practicespeciality}
+\CreateTextField{\SetPracticeCourse}{practicecourse}
+\CreateTextField{\SetPracticeUni}{practiceuni}
+
+\SetPracticeSubject{\directlua{tex.sprint(records.subject)}}
+\SetPracticeSpeciality{\directlua{tex.sprint(records.speciality)}}
+\SetPracticeCourse{\directlua{tex.sprint(records.course)}}
+\SetPracticeUni{\directlua{tex.sprint(records.uni)}}
+
+\newcommand{\PracticeSubject}{\PrintTextField{practicesubject}}
+\newcommand{\PracticeSpeciality}{\PrintTextField{practicespeciality}}
+\newcommand{\PracticeCourse}{\PrintTextField{practicecourse}}
+\newcommand{\PracticeUni}{\PrintTextField{practiceuni}}
 
 \NewStarredTheorem{theorem}{Теорема}
 \NewStarredTheorem{lemma}{Лемма}
@@ -122,6 +107,12 @@
 \RequirePackage{xsim}
 \RequirePackage{tasks}
 
+\providecommand{\printsolutionbool}{false}
+
+\newcommand{\practice@AtBeginDocumentAfterXSIM}[2]{%
+  \AddToHook{begindocument}[practice-#1]{#2}%
+  \DeclareHookRule{begindocument}{practice-#1}{after}{xsim}%
+}
 
 \DeclareExerciseEnvironmentTemplate{ex-custom-template-points}
 {%
@@ -154,18 +145,129 @@
   \noindent\textit{\GetExerciseName.\ }{}
 }%
 {}
+
+\DeclareExerciseType{question}{%
+  exercise-env = question,
+  solution-env = answer,
+  exercise-name = \XSIMtranslate{question},
+  exercises-name = \XSIMtranslate{questions},
+  solution-name = \XSIMtranslate{solution},
+  solutions-name = \XSIMtranslate{solutions},
+  exercise-template = ex-custom-template-points,
+  solution-template = sol-custom-template,
+  exercise-heading = \subsection*,
+  solution-heading = \subsection*
+}
+
+\ExplSyntaxOn
+\cs_new_protected:cpn {practice@setsolutionprint}
+  {
+    \exp_args:Nx \xsimsetup
+      {
+        solution/print = \printsolutionbool,
+        answer/print = \printsolutionbool
+      }
+  }
+\ExplSyntaxOff
+
+\AddToHook{begindocument/before}[practice-solutions]{\practice@setsolutionprint}
+
 \xsimsetup{
+  exercise/template = ex-custom-template-points,
   solution/template = sol-custom-template
 }
 
 \settasks{
-label = \theexercise.\arabic* ,
+label = \GetExerciseProperty{counter}.\arabic* ,
 item-indent = 2em ,
 label-width = 2em ,
 label-offset = 0pt
 }
 
-\NewDocumentCommand{\PrintTotalPoints}{}{\vspace{0.5ex}\hrule\vspace{0.5ex}\hfill Сумма баллов \TotalExerciseTypeGoal{exercise}{points}{}{}}
+\NewDocumentCommand{\PrintTotalPoints}{O{exercise}}{\vspace{0.5ex}\hrule\vspace{0.5ex}\hfill Сумма баллов \TotalExerciseTypeGoal{#1}{points}{}{}}
+\newcommand{\addpt}[1]{(\textit{\addpoints{#1}})}
+
+\ExplSyntaxOn
+\DeclareExerciseTableTemplate {sheetgr}
+  {
+    \XSIMputright \ExerciseTableCode
+      {
+        \toprule
+        \XSIMifblankF { \ExerciseType }
+          { \XSIMmixedcase { \GetExerciseParameter {exercise-name} } }
+        &
+      }
+    \ForEachUsedExerciseByOrder
+      {
+        \XSIMifeqT {#1} { \ExerciseTableType {#1} }
+          {
+            \XSIMifblankT { \ExerciseTableType {} }
+              {
+                \XSIMputright \ExerciseTableCode
+                  {
+                    \XSIMmixedcase
+                      { \ExerciseParameterGet {#1} {exercise-name} ~ }
+                  }
+              }
+            \XSIMputright \ExerciseTableCode { #3 & }
+          }
+      }
+    \XSIMputright \ExerciseTableCode
+      {
+        \XSIMtranslate {total} \\
+        \midrule \XSIMmixedcase { Максимум } &
+      }
+    \ForEachUsedExerciseByOrder
+      {
+        \XSIMifeqT {#1} { \ExerciseTableType {#1} }
+          {
+            \XSIMputright \ExerciseTableCode
+              { \XSIMifblankTF {#5} {\printgoal{0}} {\printgoal{#5}} & }
+          }
+      }
+    \XSIMputright \ExerciseTableCode
+      {
+        \XSIMifblankTF { \ExerciseType }
+          { \TotalExerciseGoal {points} {} {} }
+          { \TotalExerciseTypeGoal { \ExerciseType } {points} {} {} }
+        \\ \midrule
+        \XSIMmixedcase { \XSIMtranslate { reached }} &
+      }
+    \ForEachUsedExerciseByOrder
+      {
+        \XSIMifeqT {#1} { \ExerciseTableType {#1} }
+          { \XSIMputright \ExerciseTableCode {&} }
+      }
+    \XSIMputright \ExerciseTableCode { \\ \bottomrule }
+    \edef \numberofcolumns
+      {
+        \XSIMifblankTF { \ExerciseType }
+          {\numberofusedexercises}
+          {\csname numberof \ExerciseType s\endcsname}
+      }
+    \XSIMifeqF {\numberofcolumns} {0}
+      {
+        \begin {tabular} {l*{\numberofcolumns}{c}c}
+        \ExerciseTableCode
+        \end {tabular}
+      }
+  }
+\ExplSyntaxOff
+
+\newcommand{\practice@printgradingheader}[1][exercise]{%
+  \par\noindent
+  \begin{minipage}[c]{0.49\textwidth}%
+    \gradingtable[type=#1, template=sheetgr]%
+  \end{minipage}\hfill
+  \begin{minipage}[c]{0.45\textwidth}%
+    \noindent ФИО:\enspace\hrulefill\par
+    \vspace{0.5em}%
+    \noindent Группа:\enspace\hrulefill\par
+    \vspace{0.5em}%
+    \noindent Дата:\enspace\hrulefill\par
+  \end{minipage}%
+  \par\vspace{3em}%
+}
 
 % ============================================================================
 % LOCALIZATION (XSIM)
@@ -187,5 +289,15 @@ label-offset = 0pt
 \DeclareExerciseTranslation{russian}{per-section-heading}{\XSIMmixedcase{\GetExerciseParameter{solutions-name}} к \XSIMmixedcase{\GetExerciseParameter{exercises-name}} Раздела \nobreakspace \ExerciseSection}
 \DeclareExerciseTranslation{russian}{per-chapter-heading}{\XSIMmixedcase{\GetExerciseParameter{solutions-name}} к \XSIMmixedcase{\GetExerciseParameter{exercises-name}} Главы \nobreakspace \ExerciseChapter}
 
+% ============================================================================
+% MODE SETUP
+% ============================================================================
 
+\edef\practice@modefile{code/practice.\practice@mode.tex}
+\InputIfFileExists{\practice@modefile}{}{%
+  \ClassError{practice}{Unknown practice mode `\practice@mode'}{%
+    Supported modes are seminar, homework, assessment, quiz, and test.%
+  }%
+}
 
+\endinput

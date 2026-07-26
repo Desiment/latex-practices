@@ -1,0 +1,28 @@
+\geometry{%
+  a4paper,
+  margin=1cm,
+  includefoot,
+  includehead
+}
+
+\CreateTextField{\SetSeminarName}{seminarname}
+\CreateTextField{\SetSeminarDate}{seminardate}
+
+\SetSeminarName{}
+\SetSeminarDate{}
+
+\newcommand{\SeminarName}{\PrintTextField{seminarname}}
+\newcommand{\SeminarDate}{\PrintTextField{seminardate}}
+
+\AtBeginDocument{%
+  \title{\SeminarName}%
+  \date{\SeminarDate}%
+  \pagestyle{fancy}%
+  \fancyhf{}%
+  \fancyhead[L]{\PracticeSpeciality, \PracticeUni, курс \PracticeCourse}%
+  \fancyhead[C]{\PracticeSubject. Практика}%
+  \fancyhead[R]{\SeminarDate}%
+  \fancyfoot[C]{\thepage}%
+  \section*{\SeminarName}%
+  \xsimsetup{exercise/template = ex-custom-template-no-points}%
+}
