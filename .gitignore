@@ -1,0 +1,13 @@
+.opencode/
+templates/.build/
+templates/*.pdf
+templates/*.synctex.gz
+templates/*.idx
+templates/*.ilg
+templates/*.ind
+examples/.build/
+examples/*.pdf
+examples/*.synctex.gz
+examples/*.idx
+examples/*.ilg
+examples/*.ind
