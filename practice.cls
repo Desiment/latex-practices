@@ -1,5 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{practice}[2026/07/05 v0.2.0 Desiment LaTeX class for practice, homeworks and tests]
+\makeatletter
 %
 % Public class entrypoint. Shared options, metadata, theorem/math setup, and XSIM
 % configuration live here. Mode-specific layout and headers are loaded from
@@ -17,6 +18,7 @@
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessKeyvalOptions{practice}
 \LoadClass[a4paper]{article}
+\makeatletter
 
 \RequirePackage{iftex}
 \RequireLuaTeX
@@ -109,6 +111,7 @@
 
 \RequirePackage{xsim}
 \RequirePackage{tasks}
+\makeatletter
 
 \providecommand{\printsolutionbool}{false}
 
@@ -172,6 +175,7 @@
       }
   }
 \ExplSyntaxOff
+\makeatletter
 
 \AddToHook{begindocument/before}[practice-solutions]{\practice@setsolutionprint}
 
@@ -251,6 +255,7 @@ label-offset = 0pt
       }
   }
 \ExplSyntaxOff
+\makeatletter
 
 \xsimsetup{
   exercise/template = ex-custom-template-points,
@@ -311,4 +316,5 @@ label-offset = 0pt
   }%
 }
 
+\makeatother
 \endinput
