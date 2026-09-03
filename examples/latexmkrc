@@ -27,10 +27,8 @@ splice @ARGV, 0, 0,
     if @pretex;
 
 ensure_path('LUAINPUTS', '..//');
-ensure_path('LUAINPUTS', '../dependencies//');
 ensure_path('LUAINPUTS', '../.dependencies//');
 ensure_path('TEXINPUTS', '..//');
-ensure_path('TEXINPUTS', '../dependencies//');
 ensure_path('TEXINPUTS', '../.dependencies//');
 
 # Quiz print mode uses the same quiz example with \print defined:
