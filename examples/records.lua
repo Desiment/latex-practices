@@ -1,6 +1,7 @@
 return {
-  subject = "Subject Name",
-  speciality = "Program Name",
+  subject = "Предмет",
+  speciality = "Группы",
   course = "1",
-  uni = "University Name"
+  uni = "Университет",
+  year = "2025-2026"
 }

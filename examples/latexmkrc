@@ -3,7 +3,7 @@ $aux_dir   = '.build';
 $out_dir   = '.';
 $clean_ext = 'out xsim';
 
-$lualatex = 'lualatex %O -halt-on-error --shell-escape %S';
+$lualatex = 'lualatex %O -halt-on-error -synctex=1 --shell-escape %S';
 
 my %flags = (
     '--print' => q{\def\print{}},
@@ -26,9 +26,12 @@ splice @ARGV, 0, 0,
     '-usepretex=' . join('', @pretex)
     if @pretex;
 
-ensure_path('TEXINPUTS', '../.dependencies//');
-ensure_path('TEXINPUTS', '..//');
 ensure_path('LUAINPUTS', '..//');
+ensure_path('LUAINPUTS', '../dependencies//');
+ensure_path('LUAINPUTS', '../.dependencies//');
+ensure_path('TEXINPUTS', '..//');
+ensure_path('TEXINPUTS', '../dependencies//');
+ensure_path('TEXINPUTS', '../.dependencies//');
 
 # Quiz print mode uses the same quiz example with \print defined:
 # latexmk --print example.quiz.tex

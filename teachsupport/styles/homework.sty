@@ -1,0 +1,17 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{homework}[2026/01/01 Homework document style]
+
+\newcommand{\HomeworkNumber}{}
+\newcommand{\HomeworkDeadline}{}
+
+\AtBeginDocument{%
+  \title{Д.З. \HomeworkNumber}%
+  \date{\HomeworkDeadline}%
+  \pagestyle{fancy}%
+  \lhead{\PracticeSpeciality, \PracticeUni, курс \PracticeCourse}%
+  \chead{\PracticeSubject. Д.З. №\HomeworkNumber}%
+  \rhead{Дедлайн: \HomeworkDeadline}%
+  \xsimsetup{%
+    exercise/template = ex-custom-template-points%
+  }%
+}
