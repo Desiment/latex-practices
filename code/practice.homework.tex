@@ -1,9 +1,43 @@
+% =============================================================================
+%                               HOMEWORK MODE
+% =============================================================================
+%
+% Graded homework-sheet layout. This module owns homework metadata fields,
+% compact page geometry, and headers that show assignment number and deadline.
+
+% -----------------------------------------------------------------------------
+% Page Geometry
+% -----------------------------------------------------------------------------
+%
+% Homework sheets use the standard compact A4 practice layout.
+
 \geometry{%
   a4paper,
   margin=1cm,
   includefoot,
   includehead
 }
+
+% -----------------------------------------------------------------------------
+% User Commands
+% -----------------------------------------------------------------------------
+%
+% \SetHomeworkNumber and \SetHomeworkDeadline
+%
+% Purpose:
+%   Store homework metadata in tssuite text fields for title and header output.
+%
+% Usage:
+%   \SetHomeworkNumber{3}
+%   \SetHomeworkDeadline{2026-10-01}
+%
+% \HomeworkNumber and \HomeworkDeadline
+%
+% Purpose:
+%   Print the current homework field values.
+%
+% Usage:
+%   \HomeworkNumber
 
 \CreateTextField{\SetHomeworkNumber}{homeworknumber}
 \CreateTextField{\SetHomeworkDeadline}{homeworkdeadline}
@@ -13,6 +47,13 @@
 
 \newcommand{\HomeworkNumber}{\PrintTextField{homeworknumber}}
 \newcommand{\HomeworkDeadline}{\PrintTextField{homeworkdeadline}}
+
+% -----------------------------------------------------------------------------
+% Begin-Document Setup
+% -----------------------------------------------------------------------------
+%
+% Homework mode keeps default graded exercise templates from practice.cls and
+% installs assignment-specific running headers.
 
 \AtBeginDocument{%
   \title{Д.З. \HomeworkNumber}%

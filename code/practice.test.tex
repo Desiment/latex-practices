@@ -1,9 +1,43 @@
+% =============================================================================
+%                                TEST MODE
+% =============================================================================
+%
+% Ungraded test layout using question environments. This module owns test
+% metadata fields, headers, and the printed student-identification block.
+
+% -----------------------------------------------------------------------------
+% Page Geometry
+% -----------------------------------------------------------------------------
+%
+% Tests use A4 pages with slightly larger margins than seminars and homework.
+
 \geometry{%
   a4paper,
   margin=1.2cm,
   includefoot,
   includehead
 }
+
+% -----------------------------------------------------------------------------
+% User Commands
+% -----------------------------------------------------------------------------
+%
+% \SetTestDate and \SetTestTitle
+%
+% Purpose:
+%   Store test metadata in tssuite text fields for title and header output.
+%
+% Usage:
+%   \SetTestTitle{Итоговый тест}
+%   \SetTestDate{2026-12-01}
+%
+% \TestDate and \TestTitle
+%
+% Purpose:
+%   Print the current test field values.
+%
+% Usage:
+%   \TestTitle
 
 \CreateTextField{\SetTestDate}{testdate}
 \CreateTextField{\SetTestTitle}{testtitle}
@@ -13,6 +47,13 @@
 
 \newcommand{\TestDate}{\PrintTextField{testdate}}
 \newcommand{\TestTitle}{\PrintTextField{testtitle}}
+
+% -----------------------------------------------------------------------------
+% Begin-Document Setup
+% -----------------------------------------------------------------------------
+%
+% Test mode is ungraded, so question environments use the no-points template and
+% the document begins with a compact title/student block.
 
 \AtBeginDocument{%
   \title{\TestTitle}%

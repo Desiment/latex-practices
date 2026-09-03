@@ -1,18 +1,21 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{practice}[2026/07/05 v0.2.0 Desiment LaTeX class for practice, homeworks and tests]
+%
+% Public class entrypoint. Shared options, metadata, theorem/math setup, and XSIM
+% configuration live here. Mode-specific layout and headers are loaded from
+% code/practice.<mode>.tex at the end of the file.
 \RequirePackage{kvoptions}  % Key-value options
-\SetupKeyvalOptions{prefix=practice@}
+\SetupKeyvalOptions{family=practice,prefix=practice@}
 \DeclareStringOption[{records.lua}]{recordsfile}     % Filename for title configuration
 
 \def\practice@mode{seminar}
-\DeclareOption{seminar}{\def\practice@mode{seminar}}
-\DeclareOption{homework}{\def\practice@mode{homework}}
-\DeclareOption{assessment}{\def\practice@mode{assessment}}
-\DeclareOption{quiz}{\def\practice@mode{quiz}}
-\DeclareOption{test}{\def\practice@mode{test}}
-\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
-\ProcessKeyvalOptions*
-\ProcessOptions\relax
+\DeclareVoidOption{seminar}{\def\practice@mode{seminar}}
+\DeclareVoidOption{homework}{\def\practice@mode{homework}}
+\DeclareVoidOption{assessment}{\def\practice@mode{assessment}}
+\DeclareVoidOption{quiz}{\def\practice@mode{quiz}}
+\DeclareVoidOption{test}{\def\practice@mode{test}}
+\DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{article}}
+\ProcessKeyvalOptions{practice}
 \LoadClass[a4paper]{article}
 
 \RequirePackage{iftex}
@@ -292,6 +295,13 @@ label-offset = 0pt
 % ============================================================================
 % MODE SETUP
 % ============================================================================
+%
+% Mode modules live in code/practice.<mode>.tex. Each module owns mode-specific
+% geometry, fields, headers, and begin-document setup while shared exercise and
+% math behavior remains in this public class file.
+%
+% Supported modes:
+%   seminar, homework, assessment, quiz, test.
 
 \edef\practice@modefile{code/practice.\practice@mode.tex}
 \InputIfFileExists{\practice@modefile}{}{%

@@ -1,9 +1,46 @@
+% =============================================================================
+%                              ASSESSMENT MODE
+% =============================================================================
+%
+% Graded control-work layout. This module owns assessment metadata fields,
+% grading-header setup, and running headers for exercise-based assessments.
+
+% -----------------------------------------------------------------------------
+% Page Geometry
+% -----------------------------------------------------------------------------
+%
+% Assessment sheets use a slightly wider margin than seminars and homework to
+% make room for grading tables and written solutions.
+
 \geometry{%
   a4paper,
   margin=1.5cm,
   includefoot,
   includehead
 }
+
+% -----------------------------------------------------------------------------
+% User Commands
+% -----------------------------------------------------------------------------
+%
+% \SetAssessmentNumber, \SetAssessmentDate, and \SetAssessmentTitle
+%
+% Purpose:
+%   Store assessment metadata in tssuite text fields for title, header, and
+%   grading-header output.
+%
+% Usage:
+%   \SetAssessmentNumber{2}
+%   \SetAssessmentDate{2026-11-01}
+%   \SetAssessmentTitle{Контрольная работа №2}
+%
+% \AssessmentNumber, \AssessmentDate, and \AssessmentTitle
+%
+% Purpose:
+%   Print the current assessment field values.
+%
+% Usage:
+%   \AssessmentTitle
 
 \CreateTextField{\SetAssessmentNumber}{assessmentnumber}
 \CreateTextField{\SetAssessmentDate}{assessmentdate}
@@ -16,6 +53,13 @@
 \newcommand{\AssessmentNumber}{\PrintTextField{assessmentnumber}}
 \newcommand{\AssessmentDate}{\PrintTextField{assessmentdate}}
 \newcommand{\AssessmentTitle}{\PrintTextField{assessmenttitle}}
+
+% -----------------------------------------------------------------------------
+% Begin-Document Setup
+% -----------------------------------------------------------------------------
+%
+% Assessment mode grades exercise environments and prints the shared grading
+% header after xsim has initialized exercise totals.
 
 \practice@AtBeginDocumentAfterXSIM{assessment}{%
   \title{\AssessmentTitle}%

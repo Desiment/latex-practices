@@ -1,9 +1,45 @@
+% =============================================================================
+%                               SEMINAR MODE
+% =============================================================================
+%
+% Ungraded practice-sheet layout for seminar sessions. This module owns seminar
+% metadata fields, compact page geometry, headers, and the initial section title.
+
+% -----------------------------------------------------------------------------
+% Page Geometry
+% -----------------------------------------------------------------------------
+%
+% Seminar sheets use a compact A4 layout with both header and footer included in
+% the text block calculation.
+
 \geometry{%
   a4paper,
   margin=1cm,
   includefoot,
   includehead
 }
+
+% -----------------------------------------------------------------------------
+% User Commands
+% -----------------------------------------------------------------------------
+%
+% \SetSeminarName and \SetSeminarDate
+%
+% Purpose:
+%   Store seminar metadata in tssuite text fields for later printing in headers
+%   and document title data.
+%
+% Usage:
+%   \SetSeminarName{Дифференцирование}
+%   \SetSeminarDate{2026-09-01}
+%
+% \SeminarName and \SeminarDate
+%
+% Purpose:
+%   Print the current seminar field values.
+%
+% Usage:
+%   \SeminarName
 
 \CreateTextField{\SetSeminarName}{seminarname}
 \CreateTextField{\SetSeminarDate}{seminardate}
@@ -13,6 +49,13 @@
 
 \newcommand{\SeminarName}{\PrintTextField{seminarname}}
 \newcommand{\SeminarDate}{\PrintTextField{seminardate}}
+
+% -----------------------------------------------------------------------------
+% Begin-Document Setup
+% -----------------------------------------------------------------------------
+%
+% Seminar mode is ungraded, so exercises use the no-points template and the sheet
+% opens with the seminar title as an unnumbered section.
 
 \AtBeginDocument{%
   \title{\SeminarName}%

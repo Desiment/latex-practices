@@ -1,9 +1,46 @@
+% =============================================================================
+%                                QUIZ MODE
+% =============================================================================
+%
+% Short graded quiz layout. This module owns quiz metadata fields, A5 page
+% geometry, optional two-copy print imposition, and question-based grading setup.
+
+% -----------------------------------------------------------------------------
+% Page Geometry
+% -----------------------------------------------------------------------------
+%
+% Quizzes are authored as A5 pages. The optional print path imposes each A5 quiz
+% twice on a landscape A4 sheet.
+
 \geometry{%
   a5paper,
   margin=8mm,
   includefoot,
   includehead
 }
+
+% -----------------------------------------------------------------------------
+% User Commands
+% -----------------------------------------------------------------------------
+%
+% \SetQuizNumber, \SetQuizDate, and \SetQuizTitle
+%
+% Purpose:
+%   Store quiz metadata in tssuite text fields for title, footer, and grading
+%   output.
+%
+% Usage:
+%   \SetQuizNumber{4}
+%   \SetQuizDate{2026-09-15}
+%   \SetQuizTitle{Летучка №4}
+%
+% \QuizNumber, \QuizDate, and \QuizTitle
+%
+% Purpose:
+%   Print the current quiz field values.
+%
+% Usage:
+%   \QuizTitle
 
 \CreateTextField{\SetQuizNumber}{quiznumber}
 \CreateTextField{\SetQuizDate}{quizdate}
@@ -16,6 +53,13 @@
 \newcommand{\QuizNumber}{\PrintTextField{quiznumber}}
 \newcommand{\QuizDate}{\PrintTextField{quizdate}}
 \newcommand{\QuizTitle}{\PrintTextField{quiztitle}}
+
+% -----------------------------------------------------------------------------
+% Print Imposition
+% -----------------------------------------------------------------------------
+%
+% If \print is defined by latexmk --print, pgfpages duplicates the single logical
+% A5 quiz page onto two positions on an A4 landscape physical page.
 
 \ifdefined\print
   \RequirePackage{pgfpages}
@@ -42,6 +86,13 @@
   }%
   \pgfpagesuselayout{practice quiz two copies}%
 \fi
+
+% -----------------------------------------------------------------------------
+% Begin-Document Setup
+% -----------------------------------------------------------------------------
+%
+% Quiz mode grades question environments and prints the shared grading header
+% after xsim has initialized question totals.
 
 \practice@AtBeginDocumentAfterXSIM{quiz}{%
   \title{\QuizTitle}%

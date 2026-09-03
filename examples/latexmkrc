@@ -5,9 +5,30 @@ $clean_ext = 'out xsim';
 
 $lualatex = 'lualatex %O -halt-on-error --shell-escape %S';
 
-ensure_path('TEXINPUTS', '../.dependicies//');
+my %flags = (
+    '--print' => q{\def\print{}},
+);
+
+my @pretex;
+
+@ARGV = grep {
+    if (exists $flags{$_}) {
+        push @pretex, $flags{$_};
+        0;
+    }
+    else {
+        1;
+    }
+} @ARGV;
+
+splice @ARGV, 0, 0,
+    '-shell-escape',
+    '-usepretex=' . join('', @pretex)
+    if @pretex;
+
+ensure_path('TEXINPUTS', '../.dependencies//');
 ensure_path('TEXINPUTS', '..//');
 ensure_path('LUAINPUTS', '..//');
 
 # Quiz print mode uses the same quiz example with \print defined:
-# latexmk -lualatex='lualatex %O -halt-on-error --shell-escape "\def\print{}\input{%S}"' example.quiz.tex
+# latexmk --print example.quiz.tex

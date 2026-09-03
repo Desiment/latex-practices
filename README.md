@@ -6,7 +6,7 @@ Desiment's class for seminars, homework sheets, assessments, quizzes, and tests.
 
 - LuaLaTeX.
 - Class dependencies used by `practice.cls`: `fontspec`, `polyglossia`, `fancyhdr`, `geometry`, `xsim`, `tasks`, `flsuite`, `tssuite`, and `xamsmath`.
-- Local class dependencies are expected under `.dependicies/`; templates add `.dependicies//` to `TEXINPUTS`.
+- Local class dependencies are expected under `.dependencies/`; templates and examples add `.dependencies//` to `TEXINPUTS`.
 - A `records.lua` file, or another Lua records file selected with `recordsfile=...`.
 
 Minimal `records.lua`:
@@ -56,12 +56,14 @@ Example commands from `examples/`:
 
 ```sh
 latexmk example.quiz.tex
-latexmk -lualatex='lualatex %O -halt-on-error --shell-escape "\def\print{}\input{%S}"' example.quiz.tex
+latexmk --print example.quiz.tex
 ```
 
 ## Templates
 
-The `templates/` directory contains empty starter documents for new sheets. Compile templates from `templates/`:
+The `templates/` directory contains generator-oriented starter documents for new sheets. Raw templates may contain placeholders and are not required to compile before those placeholders are replaced.
+
+After generating or replacing placeholders, compile from `templates/`:
 
 ```sh
 latexmk template.seminar.tex
@@ -71,7 +73,16 @@ latexmk template.quiz.tex
 latexmk template.test.tex
 ```
 
-The template `latexmkrc` adds the parent directory and `.dependicies//` to `TEXINPUTS`, then uses LuaLaTeX with shell escape.
+The template `latexmkrc` adds the parent directory and `.dependencies//` to `TEXINPUTS`, then uses LuaLaTeX with shell escape.
+
+## Repository Layout
+
+- `practice.cls` is the public class entrypoint.
+- `code/practice.<mode>.tex` contains mode-specific geometry, fields, headers, and setup.
+- `examples/` contains compilable demonstrations with sample exercises.
+- `templates/` contains generator-oriented starter documents; raw placeholders may be uncompilable until replaced.
+- `.dependencies/` contains local package dependencies used by examples and templates.
+- `RULES.md` documents repository conventions for future changes.
 
 ## Examples
 
