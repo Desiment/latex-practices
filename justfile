@@ -29,6 +29,9 @@ deps:
 skills:
     @skills_dir=.opencode/skills; \
     mkdir -p "$skills_dir"; \
+    for link in "$skills_dir"/*; do \
+        [ -L "$link" ] && [ ! -e "$link" ] && rm "$link"; \
+    done; \
     link_skill() { \
         name="$1"; \
         source="$2"; \
@@ -47,6 +50,7 @@ skills:
     if [ -d .skills ]; then \
         for skill_dir in .skills/*; do \
             [ -d "$skill_dir" ] || continue; \
+            [ -f "$skill_dir/SKILL.md" ] || continue; \
             skill_name=$(basename "$skill_dir"); \
             link_skill "$skill_name" "../../.skills/$skill_name"; \
             count=$((count + 1)); \
@@ -57,6 +61,7 @@ skills:
         pkg_name=$(basename "$pkg_dir"); \
         for skill_dir in "$pkg_dir"/.skills/*; do \
             [ -d "$skill_dir" ] || continue; \
+            [ -f "$skill_dir/SKILL.md" ] || continue; \
             skill_name=$(basename "$skill_dir"); \
             link_skill "$skill_name" "../../.dependencies/$pkg_name/.skills/$skill_name"; \
             count=$((count + 1)); \

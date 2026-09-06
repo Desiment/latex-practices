@@ -5,7 +5,7 @@
 - Mode-specific layout, fields, headers, and begin-document setup live in `code/practice.<mode>.tex`.
 - Supported modes are `seminar`, `homework`, `assessment`, `quiz`, and `test`.
 - When adding or changing a public mode, update `practice.cls`, `code/`, matching `examples/example.<mode>.tex`, matching `templates/template.<mode>.tex`, and `README.md`.
-- Detailed OpenCode guidance already exists in `.skills/practice-*`; preserve those conventions when editing examples, templates, exercises, grading, or metadata.
+- Task-oriented OpenCode guidance lives in `.skills/practice-*`; preserve those conventions when creating sheets, authoring problems, editing templates, building examples, or maintaining class source.
 
 ## Build And Verification
 - Run `just install` in a fresh checkout to clone/update `.dependencies/` and link repo/dependency skills into `.opencode/skills/`.

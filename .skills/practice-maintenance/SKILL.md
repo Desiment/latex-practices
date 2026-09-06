@@ -1,11 +1,11 @@
 ---
-name: practice-40-maintenance
-description: Use for editing practice.cls, code/practice.<mode>.tex, public modes, README examples templates consistency, XSIM setup, and LuaLaTeX verification.
+name: practice-maintenance
+description: Use for editing practice.cls code/practice.<mode>.tex public modes class API README examples templates XSIM setup metadata fields and repo conventions.
 license: MIT
 compatibility: opencode
 metadata:
   package: practice
-  topic: maintenance
+  task: maintenance
 ---
 
 # practice: Class Maintenance
@@ -15,18 +15,18 @@ metadata:
 Use this skill when changing repository source files rather than only authoring a
 single teaching sheet. This includes edits to `practice.cls`, files under
 `code/`, public commands/options, mode behavior, examples, templates, README
-documentation, and build verification.
+documentation, and OpenCode skills.
 
 Trigger examples: `practice.cls`, `code/practice.quiz.tex`, new mode, class
 option, public command, XSIM template, grading table, README, examples,
-templates, smoke test.
+templates, `.skills`.
 
 ## Source Layout
 
 - `practice.cls`: public class entrypoint.
 - `code/practice.<mode>.tex`: mode-specific geometry, metadata fields, headers, and begin-document setup.
 - `examples/example.<mode>.tex`: concrete, compilable smoke-test documents.
-- `templates/template.<mode>.tex`: generator-oriented starter documents; placeholders may remain unresolved.
+- `templates/template.<mode>.tex`: generator-oriented starter documents.
 - `README.md`: public behavior and usage documentation.
 - `CONTRIBUTING.md`: repository conventions and verification expectations.
 - `.skills/practice-*`: tracked OpenCode skill source.
@@ -35,7 +35,7 @@ templates, smoke test.
 Supported public modes are `seminar`, `homework`, `assessment`, `quiz`, and
 `test`.
 
-## Change Scope Rules
+## Shared Versus Mode-Specific Code
 
 Keep shared behavior in `practice.cls`:
 
@@ -50,10 +50,10 @@ Keep mode-specific behavior in `code/practice.<mode>.tex`:
 
 - Geometry overrides.
 - Mode metadata setters and printable commands.
-- Headers/footers.
+- Headers and footers.
 - Mode-specific begin-document setup.
 - Quiz print imposition.
-- Automatic grading header calls for assessment/quiz.
+- Automatic grading header calls for assessment and quiz.
 
 Do not require users to input files from `code/` directly.
 
@@ -95,54 +95,24 @@ document, shipped behavior, external consumer, or explicit user requirement.
 - Keep solution printing controlled by `\printsolutionbool`.
 - Keep quiz print imposition controlled by `\printmodebool`, which must be defined before quiz mode loads.
 
-## Examples And Templates
-
-Examples must be concrete and compilable:
-
-- Use `recordsfile={records.lua}`.
-- Use real-looking metadata values, not `PLACEHOLDER-*`.
-- Preserve `\null` immediately after `\begin{document}`.
-- Keep sample content minimal but representative of the mode.
-
-Templates may remain generator inputs:
-
-- Use `recordsfile={records-PLACEHOLDER.lua}` when the generator supplies that file.
-- Keep placeholder values passed through public setters.
-- Preserve `\null` immediately after `\begin{document}`.
-- Do not require raw placeholder templates to compile.
-
 ## Verification
 
-Use LuaLaTeX only. Compile from the directory containing the relevant local
-`latexmkrc`, not from the repository root with a path argument.
+Use `practice-build` for detailed build guidance. Select the smallest relevant
+checks:
 
-Examples from `examples/`:
-
-```sh
-latexmk example.seminar.tex
-latexmk example.homework.tex
-latexmk example.assessment.tex
-latexmk example.quiz.tex
-latexmk example.test.tex
-```
-
-Special checks:
-
-```sh
-latexmk --solutions example.homework.tex
-latexmk --solutions example.quiz.tex
-latexmk --print example.quiz.tex
-latexmk --print --solutions example.quiz.tex
-```
-
-Verification selection:
-
-- Class-wide loading/math/localization changes: compile multiple representative examples.
 - Single mode changes: compile the matching example.
-- Grading table or totals changes: compile assessment/homework and quiz as relevant.
+- Shared class changes: compile multiple representative examples.
 - Solution behavior changes: include `--solutions`.
 - Quiz print changes: include `--print`.
-- Template-only placeholder changes: inspect raw templates and compile only after generating/replacing placeholders.
+- Template-only placeholder changes: inspect raw templates and compile only after placeholder replacement.
+
+## Skill Maintenance
+
+Project skills live in `.skills/`. Run `just skills` after adding, deleting, or
+renaming skills so `.opencode/skills/` reflects the tracked sources.
+
+Skill names must be lowercase hyphen-separated and match their folder names.
+Each skill needs a `description` that says both what it does and when to use it.
 
 ## Generated Artifacts
 
@@ -162,12 +132,4 @@ Do not commit generated artifacts unless explicitly requested:
 
 % Use this in class files.
 \RequirePackage{xsim}
-```
-
-```sh
-# Wrong directory for normal checks.
-latexmk examples/example.quiz.tex
-
-# Prefer this from examples/.
-latexmk example.quiz.tex
 ```
