@@ -84,7 +84,7 @@ The template `latexmkrc` adds the parent directory and `.dependencies//` to `TEX
 - `examples/` contains compilable demonstrations with sample exercises.
 - `templates/` contains generator-oriented starter documents; raw placeholders may be uncompilable until replaced.
 - `.dependencies/` contains local package dependencies used by examples and templates.
-- `RULES.md` documents repository conventions for future changes.
+- `CONTRIBUTING.md` documents repository conventions; `AGENTS.md` contains compact OpenCode guidance.
 
 ## Examples
 
