@@ -8,6 +8,7 @@
 - Detailed OpenCode guidance already exists in `.skills/practice-*`; preserve those conventions when editing examples, templates, exercises, grading, or metadata.
 
 ## Build And Verification
+- Run `just install` in a fresh checkout to clone/update `.dependencies/` and link repo/dependency skills into `.opencode/skills/`.
 - Use the local `latexmkrc` from `examples/` or `templates/`; it sets LuaLaTeX, shell escape, `.build/`, and TeX/Lua search paths.
 - Example smoke tests from `examples/`: `latexmk example.seminar.tex`, `latexmk example.homework.tex`, `latexmk example.assessment.tex`, `latexmk example.quiz.tex`, `latexmk example.test.tex`.
 - Raw files in `templates/` are generator inputs and may not compile until `PLACEHOLDER-*` values and `records-PLACEHOLDER.lua` are replaced.

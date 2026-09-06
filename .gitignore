@@ -1,4 +1,5 @@
 .opencode/
+.dependencies/
 templates/.build/
 templates/*.pdf
 templates/*.synctex.gz
