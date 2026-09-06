@@ -1,6 +1,6 @@
 ---
 name: practice-20-exercises-grading
-description: Use practice exercises, points, solutions, grading totals, and grading headers.
+description: Use for practice exercise, question, solution, answer, points, bonus-points, \addpt, \PrintTotalPoints, gradingtable, and solutions builds.
 license: MIT
 compatibility: opencode
 metadata:
@@ -15,6 +15,18 @@ metadata:
 Use this skill when writing exercises in `practice` documents, assigning points,
 adding solutions, printing totals, or working with assessment and quiz grading
 headers.
+
+Trigger examples: `exercise`, `question`, `solution`, `answer`, `points`,
+`bonus-points`, `\addpt`, `\PrintTotalPoints`, `\gradingtable`, `--solutions`,
+grading header.
+
+## Mode-To-Environment Map
+
+- `seminar`: use `exercise`; point headings are hidden by mode setup.
+- `homework`: use graded `exercise`; print totals with `\PrintTotalPoints`.
+- `assessment`: use graded `exercise`; grading header is printed automatically.
+- `quiz`: use graded `question`; print totals with `\PrintTotalPoints[question]`.
+- `test`: use `question`; point headings are hidden by mode setup.
 
 ## Exercise Basics
 
@@ -64,13 +76,16 @@ Problem statement.
 ## Points Inside Exercises
 
 Use `\addpt{<points>}` when assigning points to a part of an exercise body. It
-adds points to the exercise goal and prints them in italic parentheses.
+adds points to the current item goal and prints them in italic parentheses.
 
 ```latex
-\begin{exercise}[points=2]
+\begin{exercise}
 First part \addpt{1}. Second part \addpt{1}.
 \end{exercise}
 ```
+
+If you already pass `points=...` on the environment, do not also use `\addpt`
+for the same points unless the intended total should include both.
 
 Use `\PrintTotalPoints` after graded exercises to print the total score line:
 
@@ -102,7 +117,7 @@ Answer text.
 
 Solution printing is controlled by `\printsolutionbool`, which defaults to
 `false` in the class. Override it in the preamble when generating a solution
-version manually:
+version manually before XSIM setup runs:
 
 ```latex
 \renewcommand{\printsolutionbool}{true}
@@ -113,6 +128,12 @@ command-line flag:
 
 ```sh
 latexmk --solutions example.homework.tex
+```
+
+Use `--solutions` for quiz answers too:
+
+```sh
+latexmk --solutions example.quiz.tex
 ```
 
 ## Tasks Lists
@@ -147,6 +168,40 @@ The `sheetgr` template can be used manually when needed:
 \gradingtable[type=question, template=sheetgr]
 ```
 
+Automatic grading headers use `exercise` for `assessment` and `question` for
+`quiz`. Do not switch the type unless the document deliberately uses the other
+XSIM item type.
+
+## Complete Patterns
+
+Homework:
+
+```latex
+\begin{exercise}[points=2]
+Problem statement.
+\end{exercise}
+
+\begin{solution}
+Solution text.
+\end{solution}
+
+\PrintTotalPoints
+```
+
+Quiz:
+
+```latex
+\begin{question}[points=1]
+Problem statement.
+\end{question}
+
+\begin{answer}
+Answer text.
+\end{answer}
+
+\PrintTotalPoints[question]
+```
+
 ## Rules
 
 - Use `points=...` for homework and assessment exercises and for quiz questions.
@@ -157,3 +212,15 @@ The `sheetgr` template can be used manually when needed:
 - Put `\PrintTotalPoints[question]` after all graded quiz questions, not before them.
 - Do not redefine the built-in exercise templates in ordinary documents unless the task specifically requires a layout change.
 - Keep solution printing controlled with `\printsolutionbool`, not by deleting solution or answer environments.
+- Use `solution` with `exercise`; use `answer` with `question`.
+- Keep `tasks` labels as configured unless the task is specifically about list layout.
+
+## Avoid
+
+```latex
+% Wrong total type for quiz questions.
+\PrintTotalPoints
+
+% Use this in quiz mode instead.
+\PrintTotalPoints[question]
+```
