@@ -48,15 +48,17 @@ The corresponding printable commands remain available for document text and clas
 
 Course metadata from `records.lua` is also exposed through printable commands backed by fields: `\PracticeSubject`, `\PracticeSpeciality`, `\PracticeCourse`, and `\PracticeUni`.
 
-## Quiz Print Mode
+## Latexmk Flags
 
-The `quiz` mode uses A5 pages for editing. If `\print` is defined before the document is loaded, each A5 quiz page is imposed as two identical copies on one A4 landscape sheet.
+The local `latexmkrc` files support custom flags by injecting boolean commands before the document is loaded. `--solutions` enables `solution` and `answer` environments. In `quiz` mode, `--print` imposes each A5 quiz page as two identical copies on one A4 landscape sheet.
 
 Example commands from `examples/`:
 
 ```sh
 latexmk example.quiz.tex
 latexmk --print example.quiz.tex
+latexmk --solutions example.homework.tex
+latexmk --print --solutions example.quiz.tex
 ```
 
 ## Templates
@@ -101,7 +103,8 @@ latexmk example.test.tex
 - `question`/`answer` provide a separate XSIM question type for quizzes and tests.
 - `\PrintTotalPoints` prints the total score for graded `exercise` sheets. Use `\PrintTotalPoints[question]` for graded questions.
 - `\addpt{<points>}` adds points inside an exercise part and prints them in italic parentheses.
-- `\printsolutionbool` defaults to `false`; redefine it to `true` in the preamble to print `solution` and `answer` environments.
+- `\printsolutionbool` defaults to `false`; redefine it to `true` in the preamble or use `latexmk --solutions` to print `solution` and `answer` environments.
+- `\printmodebool` defaults to `false` and is read while loading quiz mode; use `latexmk --print` or define it before `\documentclass`.
 
 ## Grading Tables
 

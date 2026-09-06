@@ -102,10 +102,17 @@ Answer text.
 
 Solution printing is controlled by `\printsolutionbool`, which defaults to
 `false` in the class. Override it in the preamble when generating a solution
-version:
+version manually:
 
 ```latex
 \renewcommand{\printsolutionbool}{true}
+```
+
+When building from a directory with the local `latexmkrc`, prefer the equivalent
+command-line flag:
+
+```sh
+latexmk --solutions example.homework.tex
 ```
 
 ## Tasks Lists

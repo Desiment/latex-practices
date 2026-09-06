@@ -23,7 +23,7 @@ Templates use the same preamble style as `template.seminar.tex`:
 - The package license header.
 - `\documentclass[<mode>, recordsfile={...}]{practice}`.
 - Placeholder metadata passed through public `\Set...` setters.
-- Optional `\renewcommand{\printsolutionbool}{true}` only when generating a solution version.
+- Optional `\renewcommand{\printsolutionbool}{true}` only when generating a solution version manually. Prefer `latexmk --solutions` with the local `latexmkrc` when building from the command line.
 - `\null` immediately after `\begin{document}`.
 
 Template skeleton:
@@ -91,13 +91,17 @@ Raw templates may fail until placeholders are resolved. When testing generated
 documents from templates, replace placeholders first and compile from the correct
 directory with the local `latexmkrc`.
 
-## Quiz Print Mode
+## Latexmk Flags
 
-Quiz mode uses A5 pages for editing. To impose two identical A5 copies on one A4
-landscape sheet, define `\print` before input:
+The local `latexmkrc` files map custom flags to boolean commands injected before
+document loading. Use `--solutions` to enable `solution` and `answer`
+environments. Quiz mode uses A5 pages for editing; use `--print` to impose two
+identical A5 copies on one A4 landscape sheet:
 
 ```sh
 latexmk --print example.quiz.tex
+latexmk --solutions example.homework.tex
+latexmk --print --solutions example.quiz.tex
 ```
 
 ## Rules

@@ -113,7 +113,13 @@
 \RequirePackage{tasks}
 \makeatletter
 
+\providecommand{\printmodebool}{false}
 \providecommand{\printsolutionbool}{false}
+
+\ExplSyntaxOn
+\cs_new_protected:cpn {practice@iftrue} #1#2
+  { \str_if_eq:eeT { #1 } { true } { #2 } }
+\ExplSyntaxOff
 
 \newcommand{\practice@AtBeginDocumentAfterXSIM}[2]{%
   \AddToHook{begindocument}[practice-#1]{#2}%

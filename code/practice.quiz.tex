@@ -58,10 +58,10 @@
 % Print Imposition
 % -----------------------------------------------------------------------------
 %
-% If \print is defined by latexmk --print, pgfpages duplicates the single logical
-% A5 quiz page onto two positions on an A4 landscape physical page.
+% If \printmodebool is true, pgfpages duplicates the single logical A5 quiz page
+% onto two positions on an A4 landscape physical page.
 
-\ifdefined\print
+\practice@iftrue{\printmodebool}{%
   \RequirePackage{pgfpages}
   \pgfpagesdeclarelayout{practice quiz two copies}
   {}
@@ -85,7 +85,7 @@
     }%
   }%
   \pgfpagesuselayout{practice quiz two copies}%
-\fi
+}
 
 % -----------------------------------------------------------------------------
 % Begin-Document Setup

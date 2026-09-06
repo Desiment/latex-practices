@@ -1,3 +1,5 @@
+use File::Path qw(make_path);
+
 $pdf_mode  = 4;
 $aux_dir   = '.build';
 $out_dir   = '.';
@@ -6,7 +8,8 @@ $clean_ext = 'out xsim';
 $lualatex = 'lualatex %O -halt-on-error --shell-escape %S';
 
 my %flags = (
-    '--print' => q{\def\print{}},
+    '--print'     => q{\newcommand{\printmodebool}{true}},
+    '--solutions' => q{\newcommand{\printsolutionbool}{true}},
 );
 
 my @pretex;
@@ -21,14 +24,39 @@ my @pretex;
     }
 } @ARGV;
 
+my $practice_flags_file = "$aux_dir/practice-latexmk-flags.state";
+my $pretex = join('', @pretex);
+my $old_pretex = '';
+my $pretex_changed = 0;
+
+make_path($aux_dir) unless -d $aux_dir;
+
+if (open my $fh, '<', $practice_flags_file) {
+    local $/;
+    $old_pretex = <$fh>;
+    close $fh;
+}
+
+if ($old_pretex ne $pretex) {
+    open my $fh, '>', $practice_flags_file
+        or die "Cannot write $practice_flags_file: $!";
+    print {$fh} $pretex;
+    close $fh;
+    $pretex_changed = 1;
+}
+
+# Flagged builds share normal output names, so force them. The state file forces
+# the first normal build after a flagged build.
+splice @ARGV, 0, 0, '-g' if @pretex || $pretex_changed;
+
 splice @ARGV, 0, 0,
     '-shell-escape',
-    '-usepretex=' . join('', @pretex)
+    '-usepretex=' . $pretex
     if @pretex;
 
 ensure_path('TEXINPUTS', '../.dependencies//');
 ensure_path('TEXINPUTS', '..//');
 ensure_path('LUAINPUTS', '..//');
 
-# Quiz print mode uses the same quiz template with \print defined:
+# Quiz print mode uses the same quiz template with \printmodebool enabled:
 # latexmk --print template.quiz.tex
