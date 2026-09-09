@@ -64,6 +64,29 @@ Problem statement.
 \end{exercise}
 ```
 
+For seminar problems with a named topic, use `subtitle`:
+
+```latex
+\begin{exercise}[subtitle={Лемма Слуцкого}]
+Problem statement.
+\end{exercise}
+```
+
+## Reference And Theory Environments
+
+Use semantic theorem-like environments for reference material in `practice`
+sheets: `definition`, `theorem`, `lemma`, `corollary`, `proposition`, `example`,
+`remark`, and `notation`.
+
+```latex
+\begin{definition}[note={Эмпирическая функция распределения}]
+Definition text.
+\end{definition}
+```
+
+For seminars with local definitions and a short reference, the desired format is:
+tasks and local definitions first, then a separate reference page.
+
 ## Question And Answer
 
 Use this pair for quiz and test items:
@@ -172,6 +195,8 @@ Common examples:
 - Use `solution` with `exercise` and `answer` with `question`.
 - Put solutions immediately after their matching problem when solutions are requested.
 - Use points only in graded modes or when explicitly requested.
+- Use semantic theorem-like environments for reference material and put seminar
+  problem topics in `exercise` subtitles.
 - Preserve the user-requested number of problems and point totals.
 - Avoid external image/code/data files unless the user asks for them.
 - Prefer clear, compilable TeX over clever formatting.

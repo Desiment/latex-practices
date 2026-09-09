@@ -78,6 +78,13 @@ Problem statement.
 \end{document}
 ```
 
+## Preferred Seminar Layout
+
+For seminar sheets with local definitions and a short reference, the desired
+format is: tasks and local definitions first, then a separate reference page.
+Use semantic environments for definitions and reference material, put task topics
+in `exercise` subtitles, and do not use a two-column layout by default.
+
 Homework:
 
 ```latex
@@ -206,6 +213,12 @@ return {
 - Do not add points to ordinary seminar or test items unless explicitly requested.
 - Do not redefine printable metadata commands such as `\QuizDate`; use setters.
 - Do not load `flsuite`, `tssuite`, `xamsmath`, `xsim`, or `tasks` manually for ordinary sheets; `practice.cls` loads them.
+- For seminar reference material, prefer semantic environments already provided
+  by `practice.cls` over bold inline labels like `\textbf{Definition}`.
+- For seminar task topics, use `subtitle` in the `exercise` options rather than
+  standalone section headings before exercises.
+- For seminars with a reference page, place tasks before the reference unless the
+  user requests another order.
 
 ## Avoid
 
