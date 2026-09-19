@@ -1,222 +1,71 @@
 ---
 name: practice-author-problems
-description: Use for writing practice-compatible TeX exercises questions problems solutions answers points tasks choices and problem snippets for seminar homework assessment quiz test sheets.
+description: Routing skill for practice material authoring requests. Use to choose between planning sheets, formatting items, formatting solutions, creating full sheets, templates, builds, and maintenance.
 license: MIT
 compatibility: opencode
 metadata:
   package: practice
-  task: author-problems
+  task: author-problems-routing
 ---
 
-# practice: Author Problems
+# practice: Author Problems Router
+
+## Scope
+
+This is a routing skill for `practice` material authoring. It is shared across
+different mathematical and scientific courses, including but not limited to
+mathematics, statistics, logic, and physics.
+
+Keep this skill discipline-agnostic. Course-specific methods, notation
+preferences, and formatting conventions belong in the project's `AGENTS.md`.
 
 ## When To Use
 
-Use this skill when generating or editing problem statements, exercise snippets,
-questions, solutions, answers, point values, answer choices, or task lists for a
-`practice` document.
+Use this skill when the user asks broadly about writing, editing, planning, or
+formatting practice-compatible exercises, questions, problems, solutions,
+answers, points, choices, or sheets, and a narrower `practice-*` skill should be
+selected.
 
-Trigger examples: write problems, create exercises, add solutions, seminar
-problems, homework problems, quiz questions, answer choices, points, `tasks`,
-`solution`, `answer`, `\addpt`.
+Trigger examples: write problems, create exercises, add solutions, plan seminar,
+format homework, quiz questions, answer choices, points, `tasks`, `solution`,
+`answer`, `\addpt`.
 
-If the user asks for a complete document scaffold, also use
-`practice-create-sheet`.
+## Routing
 
-## Output Contract
+- Use `practice-plan-sheet` for planning a seminar, homework, assessment, quiz,
+  test, or practice session before writing final TeX.
+- Use `practice-format-items` for converting already-written tasks, statements,
+  choices, scoring, derivations, and case definitions into `practice`-compatible
+  TeX snippets.
+- Use `practice-format-solutions` for planning, reviewing, writing, or editing
+  solutions, proofs, counterexamples, and answers.
+- Use `practice-create-sheet` for complete document scaffolds with
+  `\documentclass`, `recordsfile`, metadata setters, `\null`, and totals.
+- Use `practice-templates` for templates, examples, placeholders, generated
+  starter files, and body-input conventions.
+- Use `practice-build` for compiling or debugging `practice` documents,
+  `latexmk`, LuaLaTeX, `--solutions`, `--print`, search paths, and generated
+  artifacts.
+- Use `practice-maintenance` only when maintaining `practice.cls`, mode files,
+  class APIs, README examples, templates, XSIM setup, or public behavior.
 
-Default to TeX that can be pasted into a `practice` document body. Do not include
-`\documentclass` or metadata unless the user asks for a full sheet.
+## Default Behavior
 
-Match the user's requested language. If the user writes in Russian, write problem
-statements and solutions in Russian. If the user writes in English, use English.
+If the user asks for a concrete edit, route to the narrow skill and perform the
+edit. If the user asks for planning or solution strategy, do not jump to final
+TeX; use the interview-first workflow from the appropriate narrow skill.
 
-When asked for solutions, place each `solution` or `answer` immediately after its
-matching `exercise` or `question`.
+When multiple skills apply, use the smallest correct combination. Examples:
 
-## Mode-To-Item Map
-
-- Seminar: use `exercise`, usually without points.
-- Homework: use `exercise` with `points=...` when graded.
-- Assessment: use `exercise` with `points=...`.
-- Quiz: use `question` with `points=...`.
-- Test: use `question`, usually without points.
-
-## Exercise And Solution
-
-Use this pair for seminar, homework, and assessment items:
-
-```latex
-\begin{exercise}[points=4]
-Problem statement.
-\end{exercise}
-
-\begin{solution}
-Solution text.
-\end{solution}
-```
-
-For ungraded seminar work, omit points:
-
-```latex
-\begin{exercise}
-Problem statement.
-\end{exercise}
-```
-
-For seminar problems with a named topic, use `subtitle`:
-
-```latex
-\begin{exercise}[subtitle={Лемма Слуцкого}]
-Problem statement.
-\end{exercise}
-```
-
-## Reference And Theory Environments
-
-Use semantic theorem-like environments for reference material in `practice`
-sheets: `definition`, `theorem`, `lemma`, `corollary`, `proposition`, `example`,
-`remark`, and `notation`.
-
-```latex
-\begin{definition}[note={Эмпирическая функция распределения}]
-Definition text.
-\end{definition}
-```
-
-For seminars with local definitions and a short reference, the desired format is:
-tasks and local definitions first, then a separate reference page.
-
-## Question And Answer
-
-Use this pair for quiz and test items:
-
-```latex
-\begin{question}[points=2]
-Problem statement.
-\end{question}
-
-\begin{answer}
-Answer text.
-\end{answer}
-```
-
-For ungraded test work, omit points:
-
-```latex
-\begin{question}
-Problem statement.
-\end{question}
-```
-
-## Points
-
-Use environment-level points for ordinary graded items:
-
-```latex
-\begin{exercise}[points=3]
-Problem statement.
-\end{exercise}
-```
-
-Use `bonus-points` only when the item has explicit bonus credit:
-
-```latex
-\begin{exercise}[points=4, bonus-points=1]
-Problem statement.
-\end{exercise}
-```
-
-Use `\addpt{<points>}` for scoring individual parts inside an item. It adds to
-the current item total and prints the point marker:
-
-```latex
-\begin{exercise}
-Prove the estimate \addpt{2}. Give an example \addpt{1}.
-\end{exercise}
-```
-
-Do not combine `points=...` and `\addpt` for the same scoring unless the desired
-total should include both.
-
-## Choices And Parts
-
-Use `tasks` for choices or compact parts. The class already loads and configures
-the package.
-
-```latex
-\begin{question}[points=1]
-Choose the correct answer.
-\begin{tasks}(1)
-  \task First option.
-  \task Second option.
-  \task Third option.
-\end{tasks}
-\end{question}
-```
-
-Use `\begin{tasks}(2)` or another column count only when it improves layout.
-
-## Totals
-
-If generating a full graded homework body, put totals after all exercises:
-
-```latex
-\PrintTotalPoints
-```
-
-If generating a full graded quiz body, put totals after all questions:
-
-```latex
-\PrintTotalPoints[question]
-```
-
-Do not include totals for snippets unless the user asks for a complete body or
-sheet.
-
-## Math And Notation
-
-`practice.cls` loads `xamsmath` with common plugins. Prefer project notation from
-the available `xamsmath-*` skills when writing mathematical content.
-
-Common examples:
-
-```latex
-\set{x \in \R | x > 0}
-\dd{x}
-\E X
-\binom{n}{k}
-```
+- Complete sheet with existing problems: `practice-create-sheet` plus
+  `practice-format-items`.
+- Complete sheet with final solutions: `practice-create-sheet` plus
+  `practice-format-items` plus `practice-format-solutions`.
+- Generated template body: `practice-templates` plus `practice-format-items`.
 
 ## Rules
 
-- Keep generated snippets compatible with LuaLaTeX.
-- Do not add package imports inside snippets.
-- Use `solution` with `exercise` and `answer` with `question`.
-- Put solutions immediately after their matching problem when solutions are requested.
-- Use points only in graded modes or when explicitly requested.
-- Use semantic theorem-like environments for reference material and put seminar
-  problem topics in `exercise` subtitles.
-- Preserve the user-requested number of problems and point totals.
-- Avoid external image/code/data files unless the user asks for them.
-- Prefer clear, compilable TeX over clever formatting.
-
-## Avoid
-
-```latex
-% Wrong: answer belongs to question, not exercise.
-\begin{exercise}
-Problem.
-\end{exercise}
-\begin{answer}
-Answer.
-\end{answer}
-
-% Wrong: solution belongs to exercise, not question.
-\begin{question}
-Problem.
-\end{question}
-\begin{solution}
-Solution.
-\end{solution}
-```
+- Do not duplicate detailed instructions from narrower skills here.
+- Prefer narrow skills once the task type is clear.
+- Preserve the user's language and the local project instructions from
+  `AGENTS.md`.

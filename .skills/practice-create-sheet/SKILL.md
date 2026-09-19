@@ -18,9 +18,12 @@ seminar, homework, assessment, quiz, or test.
 Trigger examples: create seminar, create homework, create quiz, full sheet,
 `\documentclass`, `recordsfile`, `records.lua`, metadata, title, date, deadline.
 
-If the user asks only for problem statements or solutions as snippets, use
-`practice-author-problems` instead. If the user asks for a complete sheet with
-problems, use this skill plus `practice-author-problems`.
+If the user asks only to format problem statements as snippets, use
+`practice-format-items` instead. If the user asks only for solution strategy or
+solution text, use `practice-format-solutions` instead. If the user asks for a
+complete sheet with problems, use this skill plus `practice-format-items`; add
+`practice-format-solutions` when final solutions or answers are part of the
+sheet.
 
 ## Mode Choice
 
