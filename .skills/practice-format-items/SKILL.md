@@ -37,6 +37,20 @@ user asks for a complete sheet.
 Match the user's requested language. If the source material is in Russian, keep
 Russian text. If it is in English, keep English text.
 
+## Source Formatting
+
+Do not hard-wrap prose in generated or edited `.tex` files. Prefer one source
+line per logical prose paragraph so the file remains readable in editors with
+soft wrapping.
+
+Keep intentional line breaks for TeX structure and readability: environment
+boundaries, `tasks`, lists, `cases`, tables, figures, TikZ, display math,
+aligned derivations, and long formulas that are easier to maintain across
+multiple source lines.
+
+When editing an existing file, do not reflow unrelated content unless the user
+explicitly asks for source formatting cleanup.
+
 ## Notation Skill Routing
 
 When formatting mathematical or scientific TeX, also load the relevant notation

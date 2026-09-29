@@ -115,6 +115,8 @@
 
 \providecommand{\printmodebool}{false}
 \providecommand{\printsolutionbool}{false}
+\newif\ifprintsolutions
+\printsolutionsfalse
 
 \ExplSyntaxOn
 \cs_new_protected:cpn {practice@iftrue} #1#2
@@ -174,6 +176,9 @@
 \ExplSyntaxOn
 \cs_new_protected:cpn {practice@setsolutionprint}
   {
+    \str_if_eq:eeTF { \printsolutionbool } { true }
+      { \printsolutionstrue }
+      { \printsolutionsfalse }
     \exp_args:Nx \xsimsetup
       {
         solution/print = \printsolutionbool,

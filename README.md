@@ -103,7 +103,7 @@ latexmk example.test.tex
 - `question`/`answer` provide a separate XSIM question type for quizzes and tests.
 - `\PrintTotalPoints` prints the total score for graded `exercise` sheets. Use `\PrintTotalPoints[question]` for graded questions.
 - `\addpt{<points>}` adds points inside an exercise part and prints them in italic parentheses.
-- `\printsolutionbool` defaults to `false`; redefine it to `true` in the preamble or use `latexmk --solutions` to print `solution` and `answer` environments.
+- `\printsolutionbool` defaults to `false`; redefine it to `true` in the preamble or use `latexmk --solutions` to print `solution` and `answer` environments. Use `\ifprintsolutions ... \fi` to conditionally print additional solution-only material.
 - `\printmodebool` defaults to `false` and is read while loading quiz mode; use `latexmk --print` or define it before `\documentclass`.
 
 ## Grading Tables
