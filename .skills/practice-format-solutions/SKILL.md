@@ -132,6 +132,20 @@ hidden assumptions and exceptional cases when the argument uses properties such
 as nonzero denominators, positivity, invertibility, uniqueness, monotonicity,
 injectivity, independence, continuity, convergence, or equality cases.
 
+Check that the solution answers every part of the current problem statement and
+uses exactly its hypotheses, parameterization, notation, and requested method.
+Do not silently solve a nearby or more convenient version of the problem.
+
+Audit notation after drafting the mathematics. Use the commands supplied by the
+loaded notation packages consistently; in particular, when the xamsmath
+calculus plugin is loaded, write `\dif x`, `\dif t`, `\dif x_i`, and similar
+differentials instead of raw `dx`, `dt`, or `dx_i`.
+
+Audit the source layout as well as the rendered mathematics. Do not hard-wrap
+ordinary prose inside a paragraph: keep one source line per logical prose
+paragraph and reserve source line breaks for TeX structure, displayed formulas,
+aligned derivations, lists, cases, tables, and other intentional layout.
+
 When constants or parameters are determined from several conditions, make the
 conditions and their consequences easy to verify using the local style: systems,
 cases, aligned equations, tables, or concise prose as appropriate.

@@ -43,6 +43,11 @@ Do not hard-wrap prose in generated or edited `.tex` files. Prefer one source
 line per logical prose paragraph so the file remains readable in editors with
 soft wrapping.
 
+In particular, do not turn a sentence such as `Таким образом мы имеем что ...`
+into several manually wrapped source lines. A source line break in ordinary
+prose is not a paragraph break and should be used only when it serves TeX
+structure or intentional source layout.
+
 Keep intentional line breaks for TeX structure and readability: environment
 boundaries, `tasks`, lists, `cases`, tables, figures, TikZ, display math,
 aligned derivations, and long formulas that are easier to maintain across
